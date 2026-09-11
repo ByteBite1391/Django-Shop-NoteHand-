@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جزوه جامع Django - از صفر تا پروژه فروشگاهی</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+:root {
+    --primary: #0C4B33;
+    --primary-light: #44B78B;
+    --primary-dark: #092E20;
+    --accent: #FFC845;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --success: #28a745;
+    --info: #17a2b8;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+    --text-light: #6c757d;
+    --border: #e1e8ed;
+    --code-bg: #1e293b;
+    --code-text: #e2e8f0;
+    --shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+    font-family: 'Vazirmatn', 'Vazir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 2;
+    font-size: 16px;
+    direction: rtl;
+    padding-bottom: 60px;
+}
+
+/* ============ Header ============ */
+.header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+    color: white;
+    padding: 50px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '🐍';
+    position: absolute;
+    font-size: 180px;
+    opacity: 0.08;
+    top: -30px;
+    left: 20px;
+    transform: rotate(-15deg);
+}
+
+.header::after {
+    content: '{}';
+    position: absolute;
+    font-size: 140px;
+    opacity: 0.06;
+    bottom: -40px;
+    right: 30px;
+    font-weight: 900;
+}
+
+.header h1 {
+    font-size: clamp(1.5rem, 5vw, 2.6rem);
+    font-weight: 800;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.header p {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    opacity: 0.95;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============ Container ============ */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* ============ TOC ============ */
+.toc {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 30px 0;
+    box-shadow: var(--shadow);
+    border-right: 4px solid var(--primary-light);
+}
+
+.toc h2 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toc ol {
+    list-style: none;
+    counter-reset: toc-counter;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+}
+
+.toc li {
+    counter-increment: toc-counter;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.toc li::before {
+    content: counter(toc-counter) ". ";
+    color: var(--primary-light);
+    font-weight: 700;
+    margin-left: 6px;
+}
+
+.toc li:hover {
+    background: #e8f5ee;
+    transform: translateX(-4px);
+}
+
+.toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* ============ Section ============ */
+.section {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin: 24px 0;
+    box-shadow: var(--shadow);
+}
+
+.section h2 {
+    font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+    color: var(--primary);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary-light);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.section h2 .num {
+    background: var(--primary);
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.section h3 {
+    font-size: clamp(1.05rem, 3vw, 1.25rem);
+    color: var(--primary-dark);
+    margin: 28px 0 14px;
+    padding-right: 12px;
+    border-right: 4px solid var(--accent);
+}
+
+.section h4 {
+    font-size: 1rem;
+    color: var(--primary);
+    margin: 20px 0 10px;
+    font-weight: 700;
+}
+
+.section p {
+    margin-bottom: 14px;
+    color: var(--text);
+    text-align: justify;
+}
+
+.section ul, .section ol {
+    margin: 12px 24px 16px 0;
+    padding-right: 8px;
+}
+
+.section li { margin-bottom: 8px; line-height: 2; }
+
+/* ============ Code ============ */
+pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 20px 18px;
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+    direction: ltr;
+    text-align: left;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.75;
+    margin: 14px 0;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+}
+
+pre::before {
+    content: 'کد';
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    font-size: 0.7rem;
+    color: #64748b;
+    font-family: 'Vazirmatn', sans-serif;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    direction: ltr;
+    unicode-bidi: embed;
+}
+
+p code, li code, td code {
+    background: #eef2f7;
+    color: var(--primary-dark);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    border: 1px solid #d8e0ea;
+    white-space: nowrap;
+}
+
+/* Code Highlighting */
+.kw { color: #ff79c6; font-weight: 600; }
+.str { color: #f1fa8c; }
+.num { color: #bd93f9; }
+.com { color: #6272a4; font-style: italic; }
+.fn { color: #50fa7b; }
+.cls { color: #8be9fd; }
+.op { color: #ff79c6; }
+
+/* ============ Callouts ============ */
+.callout {
+    padding: 16px 20px;
+    border-radius: var(--radius-sm);
+    margin: 16px 0;
+    border-right: 4px solid;
+    font-size: 0.95rem;
+    line-height: 2;
+}
+
+.callout-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.callout.info { background: #e7f3ff; border-color: var(--info); color: #0c5460; }
+.callout.warning { background: #fff8e1; border-color: var(--warning); color: #856404; }
+.callout.danger { background: #ffeaea; border-color: var(--danger); color: #721c24; }
+.callout.success { background: #e8f5ee; border-color: var(--success); color: #155724; }
+.callout.tip { background: #f0e8ff; border-color: #8b5cf6; color: #5b21b6; }
+
+/* ============ Table ============ */
+.table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 0.9rem;
+    min-width: 500px;
+}
+
+th {
+    background: var(--primary);
+    color: white;
+    padding: 12px 14px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+}
+
+tr:nth-child(even) td { background: #fafbfc; }
+tr:hover td { background: #e8f5ee; }
+
+/* ============ Diagram ============ */
+.diagram {
+    background: #f8fafc;
+    border: 2px dashed var(--primary-light);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin: 16px 0;
+    direction: ltr;
+    overflow-x: auto;
+}
+
+.diagram pre {
+    background: transparent;
+    color: var(--text);
+    box-shadow: none;
+    padding: 0;
+    font-size: 0.8rem;
+    line-height: 1.7;
+}
+
+.diagram pre::before { display: none; }
+
+/* ============ Details/Accordion ============ */
+details {
+    background: #f8fafc;
+    border-radius: var(--radius-sm);
+    margin: 12px 0;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+summary {
+    padding: 14px 18px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary-dark);
+    background: #eef2f7;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+    font-size: 0.95rem;
+}
+
+summary:hover { background: #e2e8f0; }
+
+summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    color: var(--primary-light);
+    font-weight: 300;
+    transition: transform 0.3s;
+}
+
+details[open] summary::after {
+    content: '−';
+}
+
+details > *:not(summary) {
+    padding: 14px 18px;
+}
+
+details pre {
+    margin: 0;
+}
+
+/* ============ Back to top ============ */
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 48px;
+    height: 48px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.4rem;
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    transition: all 0.3s;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.back-to-top.show { opacity: 1; pointer-events: auto; }
+.back-to-top:hover { background: var(--primary-dark); transform: translateY(-4px); }
+
+/* ============ Footer ============ */
+.footer {
+    text-align: center;
+    padding: 40px 20px 20px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.footer .heart { color: var(--danger); }
+
+/* ============ Highlight ============ */
+.highlight {
+    background: linear-gradient(180deg, transparent 60%, #fef3c7 60%);
+    padding: 0 2px;
+    font-weight: 600;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 640px) {
+    body { font-size: 15px; line-height: 1.95; }
+    .container { padding: 0 12px; }
+    .header { padding: 36px 16px 30px; }
+    .header::before { font-size: 120px; }
+    .header::after { font-size: 100px; }
+    .section { padding: 20px 16px; margin: 16px 0; }
+    .section h2 { font-size: 1.15rem; }
+    .section h2 .num { width: 32px; height: 32px; font-size: 0.9rem; }
+    pre { padding: 16px 12px; font-size: 0.76rem; line-height: 1.7; }
+    .toc { padding: 18px 14px; }
+    .toc ol { grid-template-columns: 1fr; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 8px 10px; }
+    .back-to-top { bottom: 16px; left: 16px; width: 42px; height: 42px; font-size: 1.2rem; }
+    .callout { padding: 14px; font-size: 0.9rem; }
+    details > *:not(summary) { padding: 10px 12px; }
+    summary { padding: 12px 14px; font-size: 0.9rem; }
+}
+
+@media (max-width: 400px) {
+    body { font-size: 14px; }
+    pre { font-size: 0.7rem; padding: 12px 10px; }
+    .section { padding: 16px 12px; }
+    .section h3 { font-size: 1rem; }
+}
+
+/* ============ Print ============ */
+@media print {
+    .back-to-top, .toc { display: none; }
+    .section { box-shadow: none; break-inside: avoid; page-break-inside: avoid; }
+    pre { background: #f5f5f5; color: #000; page-break-inside: avoid; }
+    .header { background: white; color: black; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<header class="header">
+    <h1>🐍 جزوه جامع Django</h1>
+    <p>از صفر مطلق تا ساخت پروژه فروشگاهی — با توضیح خط به خط</p>
+    <div class="badge">📱 رسپانسیو | 🎨 فونت وزیر | 📚 مناسب مطالعه در گوشی</div>
+</header>
+
+<div class="container">
+
+<!-- ==================== TOC ==================== -->
+<nav class="toc">
+    <h2>📑 فهرست مطالب</h2>
+    <ol>
+        <li><a href="#ch1">Django چیه و چرا؟</a></li>
+        <li><a href="#ch2">ساختار پروژه</a></li>
+        <li><a href="#ch3">مدل‌ها (Models)</a></li>
+        <li><a href="#ch4">ORM - کار با دیتابیس</a></li>
+        <li><a href="#ch5">URL ها</a></li>
+        <li><a href="#ch6">Views</a></li>
+        <li><a href="#ch7">Forms</a></li>
+        <li><a href="#ch8">Templates</a></li>
+        <li><a href="#ch9">Admin</a></li>
+        <li><a href="#ch10">Services</a></li>
+        <li><a href="#ch11">Settings</a></li>
+        <li><a href="#ch12">پروژه فروشگاهی</a></li>
+        <li><a href="#ch13">اشتباهات رایج</a></li>
+        <li><a href="#ch14">جریان کامل پروژه</a></li>
+        <li><a href="#ch15">نکات حرفه‌ای</a></li>
+        <li><a href="#ch16">چیت‌شیت نهایی</a></li>
+    </ol>
+</nav>
+
+<!-- ==================== CH 1 ==================== -->
+<section class="section" id="ch1">
+    <h2><span class="num">۱</span> Django چیه و چرا؟</h2>
+
+    <h3>۱.۱ داستان Django</h3>
+    <p>
+        Django یه <span class="highlight">فریم‌ورک وب پایتونیه</span>. فرض کن می‌خوای یه مغازه باز کنی. 
+        دو راه داری: از صفر آجر و سیمان بخری و دیوار بچینی، یا یه ساختمون آماده اجاره کنی که 
+        همه چیز توش هست. Django راه دوم رو بهت می‌ده.
+    </p>
+    <p>
+        Django همه چیز داره: سیستم دیتابیس، لاگین، پنل ادمین، مدیریت فرم، امنیت، URL routing.
+    </p>
+
+    <h3>۱.۲ معماری MVT</h3>
+    <p>تصور کن یه رستوران داری:</p>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>بخش</th><th>توی رستوران</th><th>توی Django</th><th>کارش</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Model</strong></td><td>انبار</td><td><code>models.py</code></td><td>نگه‌داری داده‌ها</td></tr>
+                <tr><td><strong>View</strong></td><td>آشپز</td><td><code>views.py</code></td><td>پردازش منطق</td></tr>
+                <tr><td><strong>Template</strong></td><td>بشقاب</td><td><code>.html</code></td><td>نمایش به مشتری</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p>
+        <strong>URL</strong> هم می‌شه گارسون: مشتری (کاربر) سفارش می‌ده، گارسون (URL) می‌بره به آشپز (View)، 
+        آشپز از انبار (Model) مواد می‌گیره، غذا رو توی بشقاب (Template) می‌ذاره، گارسون برمی‌گردونه.
+    </p>
+
+    <h3>۱.۳ جریان یک درخواست (کامل)</h3>
+    <div class="diagram">
+<pre>۱. کاربر توی مرورگر می‌زنه: /products/iphone/
+                                                       ↓
+۲. مرورگر درخواست (Request) می‌فرسته به سرور
+                                                       ↓
+۳. Django می‌ره توی config/urls.py:
+   - دنبال الگویی می‌گرده که با /products/iphone/ بخوره
+   - پیدا می‌کنه: path('products/&lt;slug:slug&gt;/', ...)
+   - می‌فهمه باید بره به ProductDetailView
+                                                       ↓
+۴. Django می‌ره توی shop/views.py:
+   - کلاس ProductDetailView رو اجرا می‌کنه
+   - DetailView خودش می‌ره مدل Product رو صدا می‌زنه
+                                                       ↓
+۵. مدل Product می‌ره توی دیتابیس:
+   SELECT * FROM shop_product WHERE slug = 'iphone'
+                                                       ↓
+۶. دیتابیس آبجکت Product رو برمی‌گردونه
+                                                       ↓
+۷. View این آبجکت رو می‌ذاره توی context:
+   context = {'product': &lt;Product: iPhone&gt;}
+                                                       ↓
+۸. View می‌ره تمپلیت shop/product.html رو پیدا می‌کنه
+                                                       ↓
+۹. تمپلیت اجرا می‌شه: HTML نهایی ساخته می‌شه
+                                                       ↓
+۱۰. HTML برمی‌گرده به مرورگر کاربر</pre>
+    </div>
+</section>
+
+<!-- ==================== CH 2 ==================== -->
+<section class="section" id="ch2">
+    <h2><span class="num">۲</span> ساختار پروژه</h2>
+
+    <h3>۲.۱ Project vs App</h3>
+    <p>
+        <strong>Project</strong> = کل ساختمون. <strong>App</strong> = یه واحد از ساختمون. 
+        یه Project می‌تونه چند App داشته باشه: <code>shop</code>، <code>blog</code>، <code>users</code>.
+    </p>
+
+    <h3>۲.۲ ساختار پوشه‌ها (خط به خط)</h3>
+<pre>myproject/
+│
+├── config/                  <span class="com">← پوشه اصلی پروژه</span>
+│   ├── __init__.py         <span class="com">← می‌گه این پوشه یه پکیج پایتونه</span>
+│   ├── settings.py         <span class="com">← همه تنظیمات اینجاست</span>
+│   ├── urls.py             <span class="com">← نقشه اصلی URL ها</span>
+│   ├── asgi.py             <span class="com">← برای سرور async</span>
+│   └── wsgi.py             <span class="com">← برای سرور production</span>
+│
+├── shop/                    <span class="com">← اسم اپ ما</span>
+│   ├── migrations/         <span class="com">← تغییرات دیتابیس</span>
+│   ├── models.py           <span class="com">← مدل‌ها (جدول‌های دیتابیس)</span>
+│   ├── views.py            <span class="com">← منطق برنامه</span>
+│   ├── urls.py             <span class="com">← URL های این اپ</span>
+│   ├── forms.py            <span class="com">← فرم‌ها</span>
+│   ├── admin.py            <span class="com">← تنظیمات پنل ادمین</span>
+│   └── services.py         <span class="com">← منطق تجاری</span>
+│
+├── templates/               <span class="com">← تمپلیت‌های HTML</span>
+├── static/                  <span class="com">← CSS, JS, images</span>
+├── media/                   <span class="com">← فایل‌های آپلودی کاربران</span>
+├── manage.py               <span class="com">← ابزار خط فرمان</span>
+└── db.sqlite3              <span class="com">← فایل دیتابیس</span></pre>
+
+    <h3>۲.۳ دستورات خط به خط</h3>
+<pre><span class="com"># django-admin = ابزار خط فرمان Django</span>
+<span class="com"># startproject = دستور ساخت پروژه</span>
+<span class="com"># config = اسم پوشه پروژه (هر چیزی می‌تونه باشه)</span>
+<span class="com"># . = توی پوشه فعلی بساز</span>
+django-admin startproject config .
+
+<span class="com"># ساخت اپ جدید</span>
+python manage.py startapp shop
+
+<span class="com"># ساخت مایگریشن (فقط فایل می‌سازه، دیتابیس رو تغییر نمی‌ده!)</span>
+python manage.py makemigrations
+
+<span class="com"># اعمال مایگریشن (واقعاً دیتابیس رو تغییر می‌ده)</span>
+python manage.py migrate
+
+<span class="com"># اجرای سرور محلی</span>
+python manage.py runserver
+
+<span class="com"># ساخت کاربر ادمین</span>
+python manage.py createsuperuser
+
+<span class="com"># ورود به shell پایتون با تنظیمات Django</span>
+python manage.py shell</pre>
+
+    <div class="callout info">
+        <div class="callout-title">💡 نکته مهم</div>
+        <code>makemigrations</code> فقط فایل تغییرات می‌سازه. <code>migrate</code> اون تغییرات رو واقعاً روی دیتابیس اعمال می‌کنه. 
+        همیشه هر دو رو پشت سر هم بزن.
+    </div>
+</section>
+
+<!-- ==================== CH 3 ==================== -->
+<section class="section" id="ch3">
+    <h2><span class="num">۳</span> مدل‌ها (Models)</h2>
+
+    <h3>۳.۱ مدل چیه؟</h3>
+    <p>
+        مدل = <strong>کلاس پایتون</strong> که به <strong>جدول دیتابیس</strong> تبدیل می‌شه. 
+        بدون نوشتن SQL، جدول می‌سازی.
+    </p>
+
+<pre><span class="kw">class</span> <span class="cls">Product</span>(models.Model):
+    title = models.<span class="fn">CharField</span>(max_length=<span class="num">255</span>)</pre>
+
+    <p>تبدیل می‌شه به:</p>
+<pre><span class="kw">CREATE TABLE</span> shop_product (
+    id <span class="kw">INTEGER PRIMARY KEY</span> AUTOINCREMENT,
+    title <span class="kw">VARCHAR</span>(<span class="num">255</span>) <span class="kw">NOT NULL</span>
+);</pre>
+
+    <h3>۳.۲ مدل کامل با توضیح خط به خط</h3>
+<pre><span class="kw">from</span> django.db <span class="kw">import</span> models              <span class="com"># خط ۱: وارد کردن ماژول models</span>
+<span class="kw">from</span> django.utils.text <span class="kw">import</span> slugify     <span class="com"># خط ۲: تابع slugify</span>
+<span class="kw">from</span> django.urls <span class="kw">import</span> reverse           <span class="com"># خط ۳: تابع reverse</span>
+<span class="kw">from</span> decimal <span class="kw">import</span> Decimal               <span class="com"># خط ۴: کلاس Decimal</span>
+
+<span class="kw">class</span> <span class="cls">Product</span>(models.Model):              <span class="com"># خط ۵: کلاس Product که از Model ارث می‌بره</span>
+    title = models.<span class="fn">CharField</span>(max_length=<span class="num">255</span>)                       <span class="com"># خط ۶</span>
+    slug = models.<span class="fn">SlugField</span>(blank=<span class="kw">True</span>)                            <span class="com"># خط ۷</span>
+    description = models.<span class="fn">TextField</span>()                               <span class="com"># خط ۸</span>
+    stash = models.<span class="fn">PositiveSmallIntegerField</span>(default=<span class="num">0</span>)            <span class="com"># خط ۹</span>
+    price = models.<span class="fn">DecimalField</span>(max_digits=<span class="num">12</span>, decimal_places=<span class="num">2</span>)   <span class="com"># خط ۱۰</span>
+    image = models.<span class="fn">ImageField</span>(upload_to=<span class="str">'product/'</span>, null=<span class="kw">True</span>, blank=<span class="kw">True</span>)  <span class="com"># خط ۱۱</span>
+    created = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)              <span class="com"># خط ۱۲</span>
+    updated = models.<span class="fn">DateTimeField</span>(auto_now=<span class="kw">True</span>)                  <span class="com"># خط ۱۳</span>
+
+    <span class="kw">def</span> <span class="fn">save</span>(self, *args, **kwargs):      <span class="com"># خط ۱۴</span>
+        <span class="kw">if</span> <span class="kw">not</span> self.slug:                  <span class="com"># خط ۱۵</span>
+            self.slug = <span class="fn">slugify</span>(self.title)  <span class="com"># خط ۱۶</span>
+        <span class="kw">return</span> <span class="fn">super</span>().<span class="fn">save</span>(*args, **kwargs)  <span class="com"># خط ۱۷</span>
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):                     <span class="com"># خط ۱۸</span>
+        <span class="kw">return</span> self.title                  <span class="com"># خط ۱۹</span>
+
+    <span class="kw">def</span> <span class="fn">get_absolute_url</span>(self):            <span class="com"># خط ۲۰</span>
+        <span class="kw">return</span> <span class="fn">reverse</span>(<span class="str">'product_detail'</span>, kwargs={<span class="str">'slug'</span>: self.slug})  <span class="com"># خط ۲۱</span></pre>
+
+    <details>
+        <summary>توضیح خط به خط</summary>
+        <ul>
+            <li><strong>خط ۱:</strong> ماژول <code>models</code> رو وارد می‌کنیم</li>
+            <li><strong>خط ۲:</strong> تابع <code>slugify</code> که متن رو URL-friendly می‌کنه: <code>"iPhone 15"</code> → <code>"iphone-15"</code></li>
+            <li><strong>خط ۳:</strong> <code>reverse</code> برای ساخت URL از روی اسم</li>
+            <li><strong>خط ۴:</strong> <code>Decimal</code> برای اعداد اعشاری دقیق (برای پول حتماً Decimal نه float!)</li>
+            <li><strong>خط ۵:</strong> کلاس Product که از Model ارث می‌بره (بدون این جدول نمی‌شه)</li>
+            <li><strong>خط ۶:</strong> فیلد متن کوتاه حداکثر ۲۵۵ کاراکتر</li>
+            <li><strong>خط ۷:</strong> فیلد Slug برای URL. <code>blank=True</code> یعنی توی فرم می‌تونه خالی باشه</li>
+            <li><strong>خط ۸:</strong> فیلد متن بلند (TEXT)</li>
+            <li><strong>خط ۹:</strong> عدد صحیح مثبت کوچک، پیش‌فرض صفر</li>
+            <li><strong>خط ۱۰:</strong> عدد اعشاری دقیق (۱۲ رقم کل، ۲ رقم اعشار)</li>
+            <li><strong>خط ۱۱:</strong> فیلد تصویر. فایل‌ها می‌رن توی <code>media/product/</code></li>
+            <li><strong>خط ۱۲:</strong> زمان ساخت. فقط یک بار موقع اولین save ست می‌شه</li>
+            <li><strong>خط ۱۳:</strong> زمان آپدیت. هر بار save تغییر می‌کنه</li>
+            <li><strong>خط ۱۴:</strong> override متد save</li>
+            <li><strong>خط ۱۵:</strong> اگه slug خالی بود</li>
+            <li><strong>خط ۱۶:</strong> از title یه slug بساز</li>
+            <li><strong>خط ۱۷:</strong> متد save والد رو صدا بزن (ذخیره کن)</li>
+            <li><strong>خط ۱۸:</strong> متد __str__ برای نمایش زیبا</li>
+            <li><strong>خط ۱۹:</strong> عنوان محصول رو برگردون</li>
+            <li><strong>خط ۲۰:</strong> متد URL اختصاصی آبجکت</li>
+            <li><strong>خط ۲۱:</strong> URL صفحه محصول رو بساز</li>
+        </ul>
+    </details>
+
+    <h3>۳.۳ انواع فیلد</h3>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>فیلد</th><th>کاربرد</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>CharField</code></td><td>متن کوتاه (نیاز به <code>max_length</code>)</td></tr>
+                <tr><td><code>TextField</code></td><td>متن بلند</td></tr>
+                <tr><td><code>IntegerField</code></td><td>عدد صحیح</td></tr>
+                <tr><td><code>PositiveSmallIntegerField</code></td><td>عدد مثبت کوچک</td></tr>
+                <tr><td><code>DecimalField</code></td><td>عدد اعشاری دقیق (برای پول)</td></tr>
+                <tr><td><code>BooleanField</code></td><td>True/False</td></tr>
+                <tr><td><code>DateTimeField</code></td><td>تاریخ و زمان</td></tr>
+                <tr><td><code>SlugField</code></td><td>URL-friendly</td></tr>
+                <tr><td><code>ImageField</code></td><td>تصویر (نیاز به Pillow)</td></tr>
+                <tr><td><code>FileField</code></td><td>فایل</td></tr>
+                <tr><td><code>EmailField</code></td><td>ایمیل</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>۳.۴ null و blank - تفاوت مهم</h3>
+    <div class="callout warning">
+        <div class="callout-title">⚠️ تفاوت حیاتی</div>
+        <ul>
+            <li><code>null=True</code>: سطح دیتابیس (SQL: NULL مجاز)</li>
+            <li><code>blank=True</code>: سطح فرم (کاربر می‌تونه خالی بذاره)</li>
+        </ul>
+        <p>برای فیلدهای متنی معمولاً <code>blank=True</code> (نه null). برای تاریخ و ForeignKey <code>null=True, blank=True</code>.</p>
+    </div>
+
+    <h3>۳.۵ روابط</h3>
+
+    <h4>ForeignKey (یک-به-چند)</h4>
+<pre><span class="kw">class</span> <span class="cls">Comment</span>(models.Model):
+    product = models.<span class="fn">ForeignKey</span>(
+        Product,                       <span class="com"># به کدوم مدل</span>
+        on_delete=models.CASCADE,      <span class="com"># وقتی محصول حذف شد چی بشه</span>
+        related_name=<span class="str">'comments'</span>        <span class="com"># دسترسی معکوس</span>
+    )
+    author = models.<span class="fn">CharField</span>(max_length=<span class="num">255</span>)
+    description = models.<span class="fn">TextField</span>()</pre>
+
+    <p><strong>on_delete گزینه‌ها:</strong></p>
+    <ul>
+        <li><code>CASCADE</code>: کامنت‌ها هم پاک بشن</li>
+        <li><code>PROTECT</code>: اجازه حذف نده</li>
+        <li><code>SET_NULL</code>: بشه NULL (نیاز به <code>null=True</code>)</li>
+        <li><code>SET_DEFAULT</code>: بشه پیش‌فرض</li>
+        <li><code>DO_NOTHING</code>: هیچی (خطرناک)</li>
+    </ul>
+
+    <p><strong>related_name:</strong></p>
+    <ul>
+        <li>بدونش: <code>product.comment_set.all()</code></li>
+        <li>با <code>related_name='comments'</code>: <code>product.comments.all()</code></li>
+    </ul>
+
+    <h4>OneToOneField (یک-به-یک)</h4>
+<pre><span class="kw">class</span> <span class="cls">Cart</span>(models.Model):
+    user = models.<span class="fn">OneToOneField</span>(
+        User,
+        on_delete=models.CASCADE,
+        related_name=<span class="str">'cart'</span>
+    )</pre>
+    <p>هر کاربر <strong>فقط یک</strong> سبد. دسترسی: <code>user.cart</code></p>
+
+    <h4>ManyToManyField (چند-به-چند)</h4>
+<pre><span class="kw">class</span> <span class="cls">Product</span>(models.Model):
+    tags = models.<span class="fn">ManyToManyField</span>(<span class="str">'Tag'</span>, related_name=<span class="str">'products'</span>)</pre>
+    <p>هر محصول چند تگ، هر تگ چند محصول. دسترسی: <code>product.tags.all()</code></p>
+
+    <h3>۳.۶ Abstract Model</h3>
+<pre><span class="kw">class</span> <span class="cls">TimeStampMixin</span>(models.Model):
+    created = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)
+    updated = models.<span class="fn">DateTimeField</span>(auto_now=<span class="kw">True</span>)
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        abstract = <span class="kw">True</span>   <span class="com"># جدول جدا نمی‌سازه</span>
+
+<span class="com"># استفاده:</span>
+<span class="kw">class</span> <span class="cls">Product</span>(<span class="cls">TimeStampMixin</span>):
+    title = models.<span class="fn">CharField</span>(max_length=<span class="num">255</span>)</pre>
+
+    <h3>۳.۷ @property - فیلد محاسباتی</h3>
+<pre><span class="kw">class</span> <span class="cls">Cart</span>(models.Model):
+    <span class="op">@</span><span class="fn">property</span>
+    <span class="kw">def</span> <span class="fn">total_price</span>(self):
+        <span class="kw">return</span> <span class="fn">sum</span>(
+            item.product.price * item.quantity
+            <span class="kw">for</span> item <span class="kw">in</span> self.items.<span class="fn">all</span>()
+        )</pre>
+    <p>توی تمپلیت: <code>{{ cart.total_price }}</code> (بدون پرانتز)</p>
+</section>
+
+<!-- ==================== CH 4 ==================== -->
+<section class="section" id="ch4">
+    <h2><span class="num">۴</span> ORM - کار با دیتابیس</h2>
+
+    <p>ORM = Object-Relational Mapping. پل بین پایتون و دیتابیس. بدون SQL می‌تونی کار کنی.</p>
+
+    <h3>۴.۱ CRUD</h3>
+<pre><span class="com"># Create - ساخت</span>
+p = Product.objects.<span class="fn">create</span>(title=<span class="str">'iPhone'</span>, price=<span class="num">1000</span>)
+
+<span class="com"># Read - خوندن</span>
+p = Product.objects.<span class="fn">get</span>(id=<span class="num">1</span>)                  <span class="com"># یکی (خطا اگه نباشه)</span>
+p = Product.objects.<span class="fn">filter</span>(price__gt=<span class="num">500</span>)      <span class="com"># چند تا</span>
+p = Product.objects.<span class="fn">all</span>()                       <span class="com"># همه</span>
+p = Product.objects.<span class="fn">first</span>()                     <span class="com"># اولی</span>
+p = Product.objects.<span class="fn">count</span>()                     <span class="com"># تعداد</span>
+
+<span class="com"># Update - ویرایش</span>
+p.price = <span class="num">1200</span>
+p.<span class="fn">save</span>()                                      <span class="com"># حتماً save</span>
+
+<span class="com"># Delete - حذف</span>
+p.<span class="fn">delete</span>()</pre>
+
+    <h3>۴.۲ Lookups (فیلترها)</h3>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Lookup</th><th>معنی</th><th>مثال</th></tr></thead>
+            <tbody>
+                <tr><td><code>exact</code></td><td>مساوی</td><td><code>filter(title__exact='iPhone')</code></td></tr>
+                <tr><td><code>iexact</code></td><td>مساوی (بدون حساسیت)</td><td><code>filter(title__iexact='iphone')</code></td></tr>
+                <tr><td><code>gt</code></td><td>بزرگ‌تر</td><td><code>filter(price__gt=500)</code></td></tr>
+                <tr><td><code>gte</code></td><td>بزرگ‌تر مساوی</td><td><code>filter(price__gte=500)</code></td></tr>
+                <tr><td><code>lt</code></td><td>کوچک‌تر</td><td><code>filter(price__lt=500)</code></td></tr>
+                <tr><td><code>lte</code></td><td>کوچک‌تر مساوی</td><td><code>filter(price__lte=500)</code></td></tr>
+                <tr><td><code>in</code></td><td>توی لیست</td><td><code>filter(id__in=[1,2,3])</code></td></tr>
+                <tr><td><code>contains</code></td><td>شامل</td><td><code>filter(title__contains='iPhone')</code></td></tr>
+                <tr><td><code>icontains</code></td><td>شامل (بدون حساسیت)</td><td><code>filter(title__icontains='iphone')</code></td></tr>
+                <tr><td><code>startswith</code></td><td>شروع با</td><td><code>filter(title__startswith='iP')</code></td></tr>
+                <tr><td><code>endswith</code></td><td>پایان با</td><td><code>filter(title__endswith='15')</code></td></tr>
+                <tr><td><code>range</code></td><td>بازه</td><td><code>filter(price__range=(100, 500))</code></td></tr>
+                <tr><td><code>isnull</code></td><td>NULL هست</td><td><code>filter(image__isnull=True)</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>۴.۳ زنجیره‌سازی و Lazy</h3>
+<pre>products = (Product.objects
+    .<span class="fn">filter</span>(stash__gt=<span class="num">0</span>)            <span class="com"># موجودی داره</span>
+    .<span class="fn">filter</span>(price__lt=<span class="num">2000</span>)         <span class="com"># زیر ۲۰۰۰</span>
+    .<span class="fn">exclude</span>(stash=<span class="num">0</span>)                <span class="com"># حذف صفرها</span>
+    .<span class="fn">order_by</span>(<span class="str">'-created'</span>)            <span class="com"># جدیدترین</span>
+    [: <span class="num">10</span>])                          <span class="com"># ۱۰ تای اول</span>
+
+<span class="com"># مهم: QuerySet lazy است!</span>
+qs = Product.objects.<span class="fn">all</span>()          <span class="com"># هنوز به دیتابیس نرفته</span>
+<span class="kw">for</span> p <span class="kw">in</span> qs:                        <span class="com"># اینجا می‌ره</span>
+    <span class="fn">print</span>(p.title)</pre>
+
+    <h3>۴.۴ get_object_or_404</h3>
+<pre><span class="kw">from</span> django.shortcuts <span class="kw">import</span> get_object_or_404
+
+product = <span class="fn">get_object_or_404</span>(Product, slug=<span class="str">'iphone'</span>)
+<span class="com"># اگه بود → برمی‌گردونه</span>
+<span class="com"># اگه نبود → خطای 404 (کاربر پسند) نه 500</span></pre>
+
+    <h3>۴.۵ get_or_create</h3>
+<pre>cart, created = Cart.objects.<span class="fn">get_or_create</span>(user=request.user)
+<span class="com"># اگه بود: created=False</span>
+<span class="com"># اگه نبود: می‌سازه و created=True</span>
+
+<span class="com"># با مقدار پیش‌فرض:</span>
+cart, created = Cart.objects.<span class="fn">get_or_create</span>(
+    user=request.user,
+    defaults={<span class="str">'status'</span>: <span class="str">'active'</span>}
+)</pre>
+
+    <div class="callout danger">
+        <div class="callout-title">🚨 باگ رایج</div>
+        <code>Cart.objects.get_or_create()</code> بدون فیلتر → هر بار سبد جدید می‌سازه!
+        همیشه فیلتر داشته باشه: <code>get_or_create(user=request.user)</code>
+    </div>
+
+    <h3>۴.۶ Aggregation</h3>
+<pre><span class="kw">from</span> django.db.models <span class="kw">import</span> Sum, Avg, Count, Max, Min
+
+Product.objects.<span class="fn">aggregate</span>(<span class="fn">Sum</span>(<span class="str">'price'</span>))
+Product.objects.<span class="fn">annotate</span>(comment_count=<span class="fn">Count</span>(<span class="str">'comments'</span>))</pre>
+
+    <h3>۴.۷ Q و F Objects</h3>
+<pre><span class="kw">from</span> django.db.models <span class="kw">import</span> Q, F
+
+<span class="com"># Q برای OR/AND پیچیده</span>
+Product.objects.<span class="fn">filter</span>(<span class="fn">Q</span>(price__lt=<span class="num">100</span>) | <span class="fn">Q</span>(stash__gt=<span class="num">0</span>))
+
+<span class="com"># F برای مقایسه فیلدها</span>
+Product.objects.<span class="fn">filter</span>(stash__gt=<span class="fn">F</span>(<span class="str">'sold'</span>))
+Product.objects.<span class="fn">update</span>(price=<span class="fn">F</span>(<span class="str">'price'</span>) * <span class="num">1.1</span>)  <span class="com"># ۱۰٪ افزایش</span></pre>
+
+    <h3>۴.۸ بهینه‌سازی - N+1 Problem</h3>
+<pre><span class="com"># ❌ بد: ۱۰۱ تا query</span>
+products = Product.objects.<span class="fn">all</span>()          <span class="com"># ۱ query</span>
+<span class="kw">for</span> p <span class="kw">in</span> products:
+    <span class="fn">print</span>(p.comments.<span class="fn">count</span>())              <span class="com"># ۱۰۰ query اضافی</span>
+
+<span class="com"># ✅ خوب: ۲ query</span>
+products = Product.objects.<span class="fn">prefetch_related</span>(<span class="str">'comments'</span>)
+cart = Cart.objects.<span class="fn">select_related</span>(<span class="str">'user'</span>).<span class="fn">get</span>(pk=<span class="num">1</span>)</pre>
+
+    <div class="callout tip">
+        <div class="callout-title">💡 قانون طلایی</div>
+        <ul>
+            <li><code>select_related('fk')</code> برای ForeignKey و OneToOne</li>
+            <li><code>prefetch_related('reverse_fk')</code> برای ManyToMany و Reverse</li>
+        </ul>
+    </div>
+</section>
+
+<!-- ==================== CH 5 ==================== -->
+<section class="section" id="ch5">
+    <h2><span class="num">۵</span> URL ها</h2>
+
+    <p><code>urls.py</code> مثل <strong>دفترچه تلفن</strong> می‌مونه: می‌گه کدوم آدرس به کدوم view بره.</p>
+
+    <h3>۵.۱ ساختار</h3>
+<pre><span class="com"># config/urls.py - فایل اصلی</span>
+<span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    <span class="fn">path</span>(<span class="str">'admin/'</span>, admin.site.urls),
+    <span class="fn">path</span>(<span class="str">''</span>, <span class="fn">include</span>(<span class="str">'shop.urls'</span>)),         <span class="com"># همه چیز shop</span>
+    <span class="fn">path</span>(<span class="str">'blog/'</span>, <span class="fn">include</span>(<span class="str">'blog.urls'</span>)),     <span class="com"># با prefix blog/</span>
+]
+
+<span class="com"># shop/urls.py - فایل اپ</span>
+urlpatterns = [
+    <span class="fn">path</span>(<span class="str">'products/'</span>, views.<span class="cls">ProductListView</span>.<span class="fn">as_view</span>(), name=<span class="str">'product_list'</span>),
+    <span class="fn">path</span>(<span class="str">'products/&lt;slug:slug&gt;/'</span>, views.<span class="cls">ProductDetailView</span>.<span class="fn">as_view</span>(), name=<span class="str">'product_detail'</span>),
+]</pre>
+
+    <h3>۵.۲ Path Converters</h3>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>مبدل</th><th>مثال</th><th>تطابق</th></tr></thead>
+            <tbody>
+                <tr><td><code>&lt;int:pk&gt;</code></td><td><code>/cart/5/</code></td><td>عدد صحیح</td></tr>
+                <tr><td><code>&lt;slug:slug&gt;</code></td><td><code>/products/iphone-15/</code></td><td>حروف، عدد، -، _</td></tr>
+                <tr><td><code>&lt;str:name&gt;</code></td><td><code>/user/ali/</code></td><td>هر رشته بدون /</td></tr>
+                <tr><td><code>&lt;uuid:id&gt;</code></td><td><code>/order/uuid/</code></td><td>UUID</td></tr>
+                <tr><td><code>&lt;path:file&gt;</code></td><td><code>/files/a/b.pdf</code></td><td>شامل /</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>۵.۳ name و reverse</h3>
+<pre><span class="com"># چرا name؟ چون اگه آدرس عوض بشه، فقط یک جا تغییر می‌دی</span>
+
+<span class="kw">from</span> django.urls <span class="kw">import</span> reverse
+
+<span class="fn">reverse</span>(<span class="str">'product_list'</span>)                              <span class="com"># → '/products/'</span>
+<span class="fn">reverse</span>(<span class="str">'product_detail'</span>, kwargs={<span class="str">'slug'</span>: <span class="str">'iphone'</span>})  <span class="com"># → '/products/iphone/'</span></pre>
+
+    <p>در تمپلیت:</p>
+<pre>{% url <span class="str">'product_list'</span> %}
+{% url <span class="str">'product_detail'</span> product.slug %}
+{% url <span class="str">'cart_detail'</span> cart.id %}</pre>
+</section>
+
+<!-- ==================== CH 6 ==================== -->
+<section class="section" id="ch6">
+    <h2><span class="num">۶</span> Views</h2>
+
+    <p>View = تابع یا کلاسی که یه <strong>Request</strong> می‌گیره و یه <strong>Response</strong> برمی‌گردونه.</p>
+
+    <h3>۶.۱ دو نوع ویو</h3>
+    <details>
+        <summary>FBV - Function-Based View (تابعی)</summary>
+<pre><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render
+
+<span class="kw">def</span> <span class="fn">product_list</span>(request):
+    products = Product.objects.<span class="fn">all</span>()
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'shop/products.html'</span>, {<span class="str">'products'</span>: products})</pre>
+        </details>
+        <details>
+            <summary>CBV - Class-Based View (کلاسی)</summary>
+<pre><span class="kw">class</span> <span class="cls">ProductListView</span>(<span class="cls">ListView</span>):
+    model = Product
+    template_name = <span class="str">'shop/products.html'</span></pre>
+        </details>
+
+    <h3>۶.۲ CBV های آماده</h3>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>کلاس</th><th>کاربرد</th></tr></thead>
+            <tbody>
+                <tr><td><code>View</code></td><td>پایه (خالی)</td></tr>
+                <tr><td><code>TemplateView</code></td><td>فقط نمایش تمپلیت</td></tr>
+                <tr><td><code>ListView</code></td><td>لیست</td></tr>
+                <tr><td><code>DetailView</code></td><td>یک آبجکت</td></tr>
+                <tr><td><code>CreateView</code></td><td>ساخت</td></tr>
+                <tr><td><code>UpdateView</code></td><td>ویرایش</td></tr>
+                <tr><td><code>DeleteView</code></td><td>حذف</td></tr>
+                <tr><td><code>FormView</code></td><td>فرم ساده</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>۶.۳ ListView</h3>
+<pre><span class="kw">class</span> <span class="cls">ProductListView</span>(<span class="cls">ListView</span>):
+    model = Product                    <span class="com"># کدوم مدل</span>
+    context_object_name = <span class="str">'products'</span>   <span class="com"># اسم در تمپلیت</span>
+    template_name = <span class="str">'shop/products.html'</span>
+    paginate_by = <span class="num">10</span>                   <span class="com"># صفحه‌بندی</span>
+    ordering = [<span class="str">'-created'</span>]            <span class="com"># ترتیب</span>
+    queryset = Product.objects.<span class="fn">filter</span>(stash__gt=<span class="num">0</span>)  <span class="com"># queryset سفارشی</span></pre>
+
+    <h3>۶.۴ DetailView</h3>
+<pre><span class="kw">class</span> <span class="cls">ProductDetailView</span>(<span class="cls">DetailView</span>):
+    model = Product
+    slug_field = <span class="str">'slug'</span>                <span class="com"># با کدوم فیلد جستجو کنه</span>
+    slug_url_kwarg = <span class="str">'slug'</span>            <span class="com"># اسم پارامتر در URL</span>
+    context_object_name = <span class="str">'product'</span>
+    template_name = <span class="str">'shop/product.html'</span>
+
+    <span class="kw">def</span> <span class="fn">get_context_data</span>(self, **kwargs):
+        context = <span class="fn">super</span>().<span class="fn">get_context_data</span>(**kwargs)  <span class="com"># context پایه</span>
+        context[<span class="str">'form'</span>] = <span class="fn">CommentForm</span>()                <span class="com"># اضافه کن</span>
+        context[<span class="str">'cart_form'</span>] = <span class="fn">AddProductToCartForm</span>()
+        <span class="kw">return</span> context</pre>
+
+    <h3>۶.۵ CreateView</h3>
+<pre><span class="kw">class</span> <span class="cls">ProductCreateView</span>(<span class="cls">CreateView</span>):
+    model = Product
+    fields = [<span class="str">'title'</span>, <span class="str">'description'</span>, <span class="str">'stash'</span>, <span class="str">'price'</span>]
+    template_name = <span class="str">'shop/product-create.html'</span>
+    success_url = <span class="fn">reverse_lazy</span>(<span class="str">'product_list'</span>)  <span class="com"># بعد از موفقیت</span></pre>
+
+    <h3>۶.۶ Mixins - خط به خط</h3>
+<pre><span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin, UserPassesTestMixin
+
+<span class="kw">class</span> <span class="cls">CommentCreateView</span>(<span class="cls">LoginRequiredMixin</span>, <span class="cls">CreateView</span>):
+    model = Comment
+    ...
+
+<span class="kw">class</span> <span class="cls">ProductUpdateView</span>(<span class="cls">LoginRequiredMixin</span>, <span class="cls">UserPassesTestMixin</span>, <span class="cls">UpdateView</span>):
+    <span class="kw">def</span> <span class="fn">test_func</span>(self):
+        <span class="kw">return</span> self.request.user.is_staff</pre>
+
+    <div class="callout warning">
+        <div class="callout-title">⚠️ ترتیب مهمه</div>
+        Mixin باید <strong>قبل از</strong> View بیاد.
+    </div>
+
+    <h3>۶.۷ dispatch - خط به خط</h3>
+<pre><span class="kw">class</span> <span class="cls">CartListView</span>(<span class="cls">ListView</span>):
+    <span class="kw">def</span> <span class="fn">dispatch</span>(self, request, *args, **kwargs):
+        <span class="kw">if</span> <span class="kw">not</span> request.user.is_staff:      <span class="com"># اگه ادمین نیست</span>
+            <span class="kw">raise</span> <span class="cls">PermissionDenied</span>          <span class="com"># خطای 403</span>
+        <span class="kw">return</span> <span class="fn">super</span>().<span class="fn">dispatch</span>(request, *args, **kwargs)</pre>
+    <p><code>dispatch</code> <strong>اولین متدی</strong> است که برای هر HTTP method اجرا می‌شه.</p>
+
+    <h3>۶.۸ form_valid با commit=False</h3>
+<pre><span class="kw">def</span> <span class="fn">form_valid</span>(self, form):
+    obj = form.<span class="fn">save</span>(commit=<span class="kw">False</span>)     <span class="com"># ذخیره نکن</span>
+    product = <span class="fn">get_object_or_404</span>(Product, slug=self.kwargs[<span class="str">'slug'</span>])
+    obj.product = product             <span class="com"># محصول رو وصل کن</span>
+    <span class="kw">return</span> <span class="fn">super</span>().<span class="fn">form_valid</span>(form)   <span class="com"># حالا ذخیره کن</span></pre>
+
+    <h3>۶.۹ Redirect</h3>
+<pre><span class="kw">from</span> django.shortcuts <span class="kw">import</span> redirect
+
+<span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'product_list'</span>)                   <span class="com"># با نام</span>
+<span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'product_detail'</span>, slug=<span class="str">'iphone'</span>)  <span class="com"># با پارامتر</span>
+<span class="kw">return</span> <span class="fn">redirect</span>(product)                          <span class="com"># با آبجکت</span></pre>
+</section>
+
+<!-- ==================== CH 7 ==================== -->
+<section class="section" id="ch7">
+    <h2><span class="num">۷</span> Forms</h2>
+
+    <h3>۷.۱ Form ساده</h3>
+<pre><span class="kw">from</span> django <span class="kw">import</span> forms
+
+<span class="kw">class</span> <span class="cls">AddProductToCartForm</span>(forms.Form):
+    quantity = forms.<span class="fn">IntegerField</span>(min_value=<span class="num">1</span>)
+    note = forms.<span class="fn">CharField</span>(required=<span class="kw">False</span>, max_length=<span class="num">200</span>)</pre>
+
+    <h3>۷.۲ ModelForm - خط به خط</h3>
+<pre><span class="kw">class</span> <span class="cls">CommentForm</span>(forms.ModelForm):
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        model = Comment                    <span class="com"># از کدوم مدل</span>
+        fields = [<span class="str">'author'</span>, <span class="str">'description'</span>]  <span class="com"># کدوم فیلدها</span>
+        <span class="com"># exclude = ['created']    # حالت دیگه</span>
+        <span class="com"># widgets = {...}          # تنظیمات ویجت</span>
+        <span class="com"># labels = {...}           # برچسب فارسی</span></pre>
+
+    <h3>۷.۳ انواع فیلد</h3>
+<pre>forms.<span class="fn">CharField</span>(max_length=<span class="num">100</span>)
+forms.<span class="fn">IntegerField</span>(min_value=<span class="num">1</span>, max_value=<span class="num">100</span>)
+forms.<span class="fn">DecimalField</span>(max_digits=<span class="num">10</span>, decimal_places=<span class="num">2</span>)
+forms.<span class="fn">BooleanField</span>(required=<span class="kw">False</span>)
+forms.<span class="fn">EmailField</span>()
+forms.<span class="fn">DateField</span>(widget=forms.<span class="cls">DateInput</span>(attrs={<span class="str">'type'</span>: <span class="str">'date'</span>}))
+forms.<span class="fn">ChoiceField</span>(choices=[(<span class="str">'a'</span>, <span class="str">'A'</span>), (<span class="str">'b'</span>, <span class="str">'B'</span>)])
+forms.<span class="fn">ModelChoiceField</span>(queryset=Product.objects.<span class="fn">all</span>())
+forms.<span class="fn">FileField</span>()
+forms.<span class="fn">ImageField</span>()</pre>
+
+    <h3>۷.۴ Widget ها</h3>
+<pre><span class="kw">class</span> <span class="cls">MyForm</span>(forms.Form):
+    title = forms.<span class="fn">CharField</span>(widget=forms.<span class="cls">TextInput</span>(attrs={
+        <span class="str">'class'</span>: <span class="str">'form-control'</span>,
+        <span class="str">'placeholder'</span>: <span class="str">'عنوان...'</span>,
+    }))
+    description = forms.<span class="fn">CharField</span>(widget=forms.<span class="cls">Textarea</span>(attrs={<span class="str">'rows'</span>: <span class="num">5</span>}))</pre>
+
+    <h3>۷.۵ در ویو - خط به خط</h3>
+<pre><span class="kw">def</span> <span class="fn">post</span>(self, request):
+    form = <span class="fn">AddProductToCartForm</span>(request.POST)  <span class="com"># با داده کاربر</span>
+    <span class="kw">if</span> form.<span class="fn">is_valid</span>():                      <span class="com"># اعتبارسنجی</span>
+        cd = form.cleaned_data               <span class="com"># دیکشنری تمیز</span>
+        quantity = cd[<span class="str">'quantity'</span>]
+        ...</pre>
+
+    <h3>۷.۶ در تمپلیت</h3>
+<pre>&lt;form method=<span class="str">"POST"</span>&gt;
+    {% csrf_token %}
+    {{ form.as_p }}         <span class="com">{# هر فیلد در &lt;p&gt; #}</span>
+    &lt;input type=<span class="str">"submit"</span> value=<span class="str">"Submit"</span>&gt;
+&lt;/form&gt;</pre>
+
+    <p><strong>انواع نمایش:</strong></p>
+    <ul>
+        <li><code>{{ form.as_p }}</code> → <code>&lt;p&gt;</code></li>
+        <li><code>{{ form.as_table }}</code> → <code>&lt;tr&gt;</code></li>
+        <li><code>{{ form.as_ul }}</code> → <code>&lt;li&gt;</code></li>
+        <li><code>{{ form.as_div }}</code> → <code>&lt;div&gt;</code></li>
+    </ul>
+
+    <h3>۷.۷ اعتبارسنجی سفارشی</h3>
+<pre><span class="kw">from</span> django.core.exceptions <span class="kw">import</span> ValidationError
+
+<span class="kw">class</span> <span class="cls">AddProductToCartForm</span>(forms.Form):
+    quantity = forms.<span class="fn">IntegerField</span>(min_value=<span class="num">1</span>)
+
+    <span class="kw">def</span> <span class="fn">clean_quantity</span>(self):                 <span class="com"># ← نام‌گذاری: clean_&lt;field&gt;</span>
+        qty = self.cleaned_data[<span class="str">'quantity'</span>]
+        <span class="kw">if</span> qty &gt; <span class="num">100</span>:
+            <span class="kw">raise</span> <span class="cls">ValidationError</span>(<span class="str">"حداکثر ۱۰۰ عدد!"</span>)
+        <span class="kw">return</span> qty
+
+    <span class="kw">def</span> <span class="fn">clean</span>(self):                        <span class="com"># برای چند فیلد</span>
+        cleaned = <span class="fn">super</span>().<span class="fn">clean</span>()
+        ...
+        <span class="kw">return</span> cleaned</pre>
+</section>
+
+<!-- ==================== CH 8 ==================== -->
+<section class="section" id="ch8">
+    <h2><span class="num">۸</span> Templates</h2>
+
+    <h3>۸.۱ ساختار پایه</h3>
+<pre><span class="com">&lt;!-- _base.html --&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% block title %}My Shop{% endblock %}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;...&lt;/header&gt;
+    &lt;main&gt;
+        {% block content %}{% endblock content %}
+    &lt;/main&gt;
+    &lt;footer&gt;...&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+<span class="com">&lt;!-- products.html --&gt;</span>
+{% extends <span class="str">"_base.html"</span> %}
+{% block content %}
+    محتوای این صفحه
+{% endblock content %}</pre>
+
+    <h3>۸.۲ {{ }} vs {% %}</h3>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>سینتکس</th><th>کاربرد</th></tr></thead>
+            <tbody>
+                <tr><td><code>{{ variable }}</code></td><td>نمایش مقدار</td></tr>
+                <tr><td><code>{% tag %}</code></td><td>منطق (if, for, url, ...)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>۸.۳ فیلترها</h3>
+<pre>{{ product.title|upper }}             <span class="com">→ IPHONE</span>
+{{ product.title|lower }}             <span class="com">→ iphone</span>
+{{ product.title|title }}             <span class="com">→ Iphone</span>
+{{ product.title|length }}            <span class="com">→ تعداد کاراکتر</span>
+{{ product.price|floatformat:2 }}     <span class="com">→ 1000.00</span>
+{{ product.description|truncatewords:20 }}  <span class="com">→ ۲۰ کلمه اول</span>
+{{ product.created|date:"Y-m-d" }}    <span class="com">→ 2024-01-15</span>
+{{ value|default:"خالی" }}            <span class="com">→ اگه خالی بود</span>
+{{ list|join:", " }}                  <span class="com">→ اتصال</span>
+{{ list|first }} / {{ list|last }}    <span class="com">→ اولین / آخرین</span>
+{{ value|add:"5" }}                   <span class="com">→ اضافه کن</span></pre>
+
+    <h3>۸.۴ تگ‌های مهم</h3>
+
+    <h4>{% for %}</h4>
+<pre>{% for product in products %}
+    &lt;h3&gt;{{ product.title }}&lt;/h3&gt;
+    {{ forloop.counter }}      <span class="com">{# 1, 2, 3 #}</span>
+    {{ forloop.counter0 }}     <span class="com">{# 0, 1, 2 #}</span>
+    {{ forloop.first }}        <span class="com">{# True برای اولی #}</span>
+    {{ forloop.last }}         <span class="com">{# True برای آخری #}</span>
+{% empty %}
+    &lt;p&gt;لیست خالیه&lt;/p&gt;
+{% endfor %}</pre>
+
+    <h4>{% if %}</h4>
+<pre>{% if user.is_authenticated %}
+    &lt;p&gt;خوش آمدی {{ user.username }}&lt;/p&gt;
+{% elif user.is_staff %}
+    &lt;p&gt;ادمین عزیز&lt;/p&gt;
+{% else %}
+    &lt;p&gt;مهمان&lt;/p&gt;
+{% endif %}
+
+<span class="com">{# عملگرها #}</span>
+{% if a == b %}
+{% if a != b %}
+{% if a > b and b < c %}
+{% if a or b %}
+{% if not a %}
+{% if "iphone" in title %}</pre>
+
+    <h4>{% url %}</h4>
+<pre>{% url <span class="str">'product_list'</span> %}
+{% url <span class="str">'product_detail'</span> product.slug %}
+{% url <span class="str">'cart_detail'</span> cart.id %}
+{% url <span class="str">'product_list'</span> %}?page=2</pre>
+
+    <h4>{% csrf_token %}</h4>
+<pre>&lt;form method=<span class="str">"POST"</span>&gt;
+    {% csrf_token %}
+    ...
+&lt;/form&gt;</pre>
+
+    <div class="callout danger">
+        <div class="callout-title">🚨 حیاتی</div>
+        <code>{% csrf_token %}</code> حتماً در همه فرم‌های POST.
+        CSRF = Cross-Site Request Forgery. توکن امنیتی که جلوی حملات رو می‌گیره.
+    </div>
+
+    <h4>{% include %}</h4>
+<pre>{% include <span class="str">"shop/_product_card.html"</span> %}
+{% include <span class="str">"shop/_product_card.html"</span> with product=item %}
+{% include <span class="str">"shop/_product_card.html"</span> with product=item only %}</pre>
+
+    <h4>{% load %}</h4>
+<pre>{% load static %}      <span class="com">{# برای {% static %} #}</span>
+{% load humanize %}    <span class="com">{# فیلترهای اضافی #}</span></pre>
+
+    <h4>{% with %}</h4>
+<pre>{% with total=cart.total_price %}
+    &lt;p&gt;جمع: {{ total }}&lt;/p&gt;
+{% endwith %}</pre>
+
+    <h3>۸.۵ context از کجا میاد؟</h3>
+<pre><span class="kw">class</span> <span class="cls">ProductDetailView</span>(<span class="cls">DetailView</span>):
+    model = Product
+    context_object_name = <span class="str">'product'</span>    <span class="com"># ← این اسم</span>
+
+    <span class="kw">def</span> <span class="fn">get_context_data</span>(self, **kwargs):
+        context = <span class="fn">super</span>().<span class="fn">get_context_data</span>(**kwargs)
+        context[<span class="str">'form'</span>] = <span class="fn">CommentForm</span>()  <span class="com"># ← این اسم</span>
+        <span class="kw">return</span> context</pre>
+
+    <p>Django خودکار اینا رو اضافه می‌کنه: <code>request</code>، <code>user</code>، <code>messages</code>، <code>perms</code>.</p>
+</section>
+
+<!-- ==================== CH 9 ==================== -->
+<section class="section" id="ch9">
+    <h2><span class="num">۹</span> Admin</h2>
+
+    <h3>۹.۱ فعال‌سازی</h3>
+<pre><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> .models <span class="kw">import</span> Product
+
+<span class="op">@</span><span class="fn">admin.register</span>(Product)               <span class="com"># این کلاس برای Product</span>
+<span class="kw">class</span> <span class="cls">ProductAdmin</span>(admin.ModelAdmin):
+    list_display = (<span class="str">'title'</span>, <span class="str">'price'</span>, <span class="str">'stash'</span>)  <span class="com"># ستون‌ها</span>
+    list_filter = (<span class="str">'stash'</span>, <span class="str">'created'</span>)        <span class="com"># فیلتر کنار</span>
+    search_fields = (<span class="str">'title'</span>, <span class="str">'description'</span>) <span class="com"># جستجو</span>
+    ordering = (<span class="str">'-created'</span>,)                  <span class="com"># ترتیب</span>
+    prepopulated_fields = {<span class="str">'slug'</span>: (<span class="str">'title'</span>,)} <span class="com"># خودکار</span></pre>
+
+    <h3>۹.۲ Inline ها</h3>
+<pre><span class="com"># جدولی</span>
+<span class="kw">class</span> <span class="cls">CommentInline</span>(admin.TabularInline):
+    model = Comment
+    extra = <span class="num">1</span>  <span class="com"># چند فرم خالی نشون بده</span>
+
+<span class="com"># عمودی</span>
+<span class="kw">class</span> <span class="cls">CartItemInline</span>(admin.StackedInline):
+    model = CartItem
+
+<span class="op">@</span><span class="fn">admin.register</span>(Product)
+<span class="kw">class</span> <span class="cls">ProductAdmin</span>(admin.ModelAdmin):
+    inlines = [<span class="cls">CommentInline</span>]</pre>
+
+    <h3>۹.۳ آپشن‌های مهم</h3>
+<pre>list_display         <span class="com"># ستون‌ها</span>
+list_filter          <span class="com"># فیلتر کنار</span>
+search_fields        <span class="com"># جستجو</span>
+ordering             <span class="com"># ترتیب</span>
+readonly_fields      <span class="com"># فقط خواندنی</span>
+fieldsets            <span class="com"># گروه‌بندی</span>
+prepopulated_fields  <span class="com"># خودکار</span>
+date_hierarchy       <span class="com"># نوار تاریخ</span>
+list_editable        <span class="com"># قابل ویرایش از لیست</span></pre>
+</section>
+
+<!-- ==================== CH 10 ==================== -->
+<section class="section" id="ch10">
+    <h2><span class="num">۱۰</span> Services و منطق تجاری</h2>
+
+    <h3>۱۰.۱ چرا services.py؟</h3>
+    <p>منطق تجاری نباید توی view باشه. دلایل:</p>
+    <ul>
+        <li>View باید فقط هماهنگ کنه</li>
+        <li>منطق تجاری قابل تست باشه</li>
+        <li>قابل استفاده در جاهای مختلف</li>
+    </ul>
+
+    <h3>۱۰.۲ transaction.atomic - خط به خط</h3>
+<pre><span class="kw">from</span> django.db <span class="kw">import</span> transaction
+
+<span class="op">@</span><span class="fn">transaction.atomic</span>
+<span class="kw">def</span> <span class="fn">create_order_from_cart</span>(cart, order):
+    <span class="kw">for</span> item <span class="kw">in</span> cart.items.<span class="fn">all</span>():
+        OrderItem.objects.<span class="fn">create</span>(
+            order=order,
+            product=item.product,
+            quantity=item.quantity
+        )
+    order.final_price = <span class="fn">sum</span>(
+        item.product.price * item.quantity
+        <span class="kw">for</span> item <span class="kw">in</span> order.items.<span class="fn">all</span>()
+    )
+    order.<span class="fn">save</span>()</pre>
+
+    <div class="callout success">
+        <div class="callout-title">✅ مزیت atomic</div>
+        اگه <strong>هر خطی</strong> خطا بده، همه تغییرات rollback می‌شه (مثل تراکنش بانکی).
+        یا همه یا هیچ‌کدوم.
+    </div>
+
+    <h3>۱۰.۳ bulk_create (سریع‌تر)</h3>
+<pre>OrderItem.objects.<span class="fn">bulk_create</span>([
+    <span class="fn">OrderItem</span>(order=order, product=item.product, quantity=item.quantity)
+    <span class="kw">for</span> item <span class="kw">in</span> cart.items.<span class="fn">all</span>()
+])
+<span class="com"># یک query به جای N تا</span></pre>
+</section>
+
+<!-- ==================== CH 11 ==================== -->
+<section class="section" id="ch11">
+    <h2><span class="num">۱۱</span> Settings</h2>
+
+    <h3>۱۱.۱ تنظیمات مهم - خط به خط</h3>
+<pre><span class="kw">import</span> os
+<span class="kw">from</span> pathlib <span class="kw">import</span> Path
+
+<span class="com"># مسیر ریشه پروژه</span>
+BASE_DIR = Path(__file__).<span class="fn">resolve</span>().parent.parent
+
+SECRET_KEY = <span class="str">'django-insecure-...'</span>   <span class="com"># کلید امنیتی</span>
+DEBUG = <span class="kw">True</span>                        <span class="com"># در production False</span>
+ALLOWED_HOSTS = []                   <span class="com"># دامنه‌های مجاز</span>
+
+INSTALLED_APPS = [
+    <span class="str">'django.contrib.admin'</span>,        <span class="com"># پنل ادمین</span>
+    <span class="str">'django.contrib.auth'</span>,          <span class="com"># احراز هویت</span>
+    <span class="str">'django.contrib.contenttypes'</span>,  <span class="com"># انواع محتوا</span>
+    <span class="str">'django.contrib.sessions'</span>,      <span class="com"># نشست‌ها</span>
+    <span class="str">'django.contrib.messages'</span>,      <span class="com"># پیام‌ها</span>
+    <span class="str">'django.contrib.staticfiles'</span>,   <span class="com"># فایل‌های استاتیک</span>
+    <span class="com"># 3rd party</span>
+    <span class="str">'allauth'</span>,
+    <span class="str">'allauth.account'</span>,
+    <span class="com"># Local</span>
+    <span class="str">'shop'</span>,
+]
+
+MIDDLEWARE = [
+    <span class="str">'django.middleware.security.SecurityMiddleware'</span>,
+    <span class="str">'django.contrib.sessions.middleware.SessionMiddleware'</span>,
+    <span class="str">'django.middleware.common.CommonMiddleware'</span>,
+    <span class="str">'django.middleware.csrf.CsrfViewMiddleware'</span>,
+    <span class="str">'django.contrib.auth.middleware.AuthenticationMiddleware'</span>,
+    <span class="str">'django.contrib.messages.middleware.MessageMiddleware'</span>,
+    <span class="str">'allauth.account.middleware.AccountMiddleware'</span>,
+    <span class="str">'django.middleware.clickjacking.XFrameOptionsMiddleware'</span>,
+]
+
+ROOT_URLCONF = <span class="str">'config.urls'</span>
+
+TEMPLATES = [{
+    <span class="str">'BACKEND'</span>: <span class="str">'django.template.backends.django.DjangoTemplates'</span>,
+    <span class="str">'DIRS'</span>: [os.path.<span class="fn">join</span>(BASE_DIR, <span class="str">'templates'</span>)],  <span class="com"># پوشه تمپلیت</span>
+    <span class="str">'APP_DIRS'</span>: <span class="kw">True</span>,                              <span class="com"># تمپلیت‌های هر اپ</span>
+    <span class="str">'OPTIONS'</span>: {
+        <span class="str">'context_processors'</span>: [
+            <span class="str">'django.template.context_processors.request'</span>,
+            <span class="str">'django.contrib.auth.context_processors.auth'</span>,
+            <span class="str">'django.contrib.messages.context_processors.messages'</span>,
+        ],
+    },
+}]
+
+DATABASES = {
+    <span class="str">'default'</span>: {
+        <span class="str">'ENGINE'</span>: <span class="str">'django.db.backends.sqlite3'</span>,   <span class="com"># SQLite برای توسعه</span>
+        <span class="str">'NAME'</span>: BASE_DIR / <span class="str">'db.sqlite3'</span>,
+    }
+}
+
+LANGUAGE_CODE = <span class="str">'fa-ir'</span>
+TIME_ZONE = <span class="str">'Asia/Tehran'</span>
+USE_I18N = <span class="kw">True</span>
+USE_TZ = <span class="kw">True</span>
+
+STATIC_URL = <span class="str">'static/'</span>
+STATICFILES_DIRS = [os.path.<span class="fn">join</span>(BASE_DIR, <span class="str">'static'</span>)]
+STATIC_ROOT = os.path.<span class="fn">join</span>(BASE_DIR, <span class="str">'staticfiles'</span>)
+
+MEDIA_URL = <span class="str">'media/'</span>
+MEDIA_ROOT = os.path.<span class="fn">join</span>(BASE_DIR, <span class="str">'media'</span>)
+
+DEFAULT_AUTO_FIELD = <span class="str">'django.db.models.BigAutoField'</span></pre>
+
+    <h3>۱۱.۲ STATIC vs MEDIA</h3>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>مفهوم</th><th>توضیح</th><th>مثال</th></tr></thead>
+            <tbody>
+                <tr><td><strong>STATIC</strong></td><td>فایل‌های خودت</td><td>CSS، JS، لوگو</td></tr>
+                <tr><td><strong>MEDIA</strong></td><td>فایل‌های آپلودی کاربران</td><td>عکس محصول، آواتار</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>۱۱.۳ allauth - خط به خط</h3>
+<pre>AUTHENTICATION_BACKENDS = [
+    <span class="str">'django.contrib.auth.backends.ModelBackend'</span>,
+    <span class="str">'allauth.account.auth_backends.AuthenticationBackend'</span>,
+]
+
+ACCOUNT_LOGIN_METHODS = {<span class="str">'email'</span>}                <span class="com"># ورود با ایمیل</span>
+ACCOUNT_SIGNUP_FIELDS = [<span class="str">"email*"</span>, <span class="str">"password1*"</span>, <span class="str">"password2*"</span>]  <span class="com"># فیلدهای ثبت‌نام</span>
+
+EMAIL_BACKEND = <span class="str">"django.core.mail.backends.console.EmailBackend"</span>
+<span class="com"># ایمیل‌ها به جای ارسال، توی کنسول چاپ می‌شن (برای توسعه)</span></pre>
+</section>
+
+<!-- ==================== CH 12 ==================== -->
+<section class="section" id="ch12">
+    <h2><span class="num">۱۲</span> پروژه فروشگاهی</h2>
+
+    <h3>۱۲.۱ مدل‌ها - خط به خط</h3>
+<pre><span class="kw">class</span> <span class="cls">TimeStampMixin</span>(models.Model):
+    created = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)
+    updated = models.<span class="fn">DateTimeField</span>(auto_now=<span class="kw">True</span>)
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        abstract = <span class="kw">True</span>                <span class="com"># جدول جدا نمی‌سازه</span>
+
+
+<span class="kw">class</span> <span class="cls">Product</span>(<span class="cls">TimeStampMixin</span>):
+    title = models.<span class="fn">CharField</span>(max_length=<span class="num">255</span>)
+    slug = models.<span class="fn">SlugField</span>(blank=<span class="kw">True</span>)
+    description = models.<span class="fn">TextField</span>()
+    stash = models.<span class="fn">PositiveSmallIntegerField</span>(default=<span class="num">0</span>)
+    price = models.<span class="fn">DecimalField</span>(max_digits=<span class="num">12</span>, decimal_places=<span class="num">2</span>)
+    image = models.<span class="fn">ImageField</span>(upload_to=<span class="str">'product/'</span>, null=<span class="kw">True</span>, blank=<span class="kw">True</span>)
+
+    <span class="kw">def</span> <span class="fn">save</span>(self, *args, **kwargs):
+        <span class="kw">if</span> <span class="kw">not</span> self.slug:
+            self.slug = <span class="fn">slugify</span>(self.title)
+        <span class="kw">return</span> <span class="fn">super</span>().<span class="fn">save</span>(*args, **kwargs)
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> self.title
+
+    <span class="kw">def</span> <span class="fn">get_absolute_url</span>(self):
+        <span class="kw">return</span> <span class="fn">reverse</span>(<span class="str">'product_detail'</span>, kwargs={<span class="str">'slug'</span>: self.slug})
+
+
+<span class="kw">class</span> <span class="cls">Comment</span>(models.Model):
+    product = models.<span class="fn">ForeignKey</span>(
+        Product, on_delete=models.CASCADE, related_name=<span class="str">'comments'</span>
+    )
+    author = models.<span class="fn">CharField</span>(max_length=<span class="num">255</span>)
+    description = models.<span class="fn">TextField</span>()
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> <span class="str">f'{self.author} - {self.product}'</span>
+
+
+<span class="kw">class</span> <span class="cls">Cart</span>(<span class="cls">TimeStampMixin</span>):
+    user = models.<span class="fn">OneToOneField</span>(User, on_delete=models.CASCADE, related_name=<span class="str">'cart'</span>)
+
+    <span class="op">@</span><span class="fn">property</span>
+    <span class="kw">def</span> <span class="fn">total_price</span>(self):
+        <span class="kw">return</span> <span class="fn">sum</span>(
+            item.product.price * item.quantity
+            <span class="kw">for</span> item <span class="kw">in</span> self.items.<span class="fn">all</span>()
+        )
+
+
+<span class="kw">class</span> <span class="cls">CartItem</span>(<span class="cls">TimeStampMixin</span>):
+    cart = models.<span class="fn">ForeignKey</span>(Cart, on_delete=models.CASCADE, related_name=<span class="str">'items'</span>)
+    product = models.<span class="fn">ForeignKey</span>(Product, on_delete=models.CASCADE)
+    quantity = models.<span class="fn">PositiveSmallIntegerField</span>(default=<span class="num">1</span>)
+
+
+<span class="kw">class</span> <span class="cls">Order</span>(<span class="cls">TimeStampMixin</span>):
+    <span class="kw">class</span> <span class="cls">StatusChoices</span>(models.TextChoices):
+        PENDING = <span class="str">'pend'</span>, <span class="str">'در انتظار'</span>
+        PAID = <span class="str">'paid'</span>, <span class="str">'پرداخت شده'</span>
+        CANCEL = <span class="str">'c'</span>, <span class="str">'لغو شده'</span>
+
+    user = models.<span class="fn">ForeignKey</span>(User, on_delete=models.CASCADE, related_name=<span class="str">'orders'</span>)
+    final_price = models.<span class="fn">DecimalField</span>(max_digits=<span class="num">12</span>, decimal_places=<span class="num">2</span>, default=<span class="cls">Decimal</span>(<span class="str">'0.00'</span>))
+    status = models.<span class="fn">CharField</span>(max_length=<span class="num">4</span>, choices=StatusChoices.choices, default=StatusChoices.PENDING)
+
+
+<span class="kw">class</span> <span class="cls">OrderItem</span>(<span class="cls">TimeStampMixin</span>):
+    order = models.<span class="fn">ForeignKey</span>(Order, on_delete=models.CASCADE, related_name=<span class="str">'items'</span>)
+    product = models.<span class="fn">ForeignKey</span>(Product, on_delete=models.CASCADE)
+    quantity = models.<span class="fn">PositiveIntegerField</span>(default=<span class="num">1</span>)</pre>
+
+    <h3>۱۲.۲ ویوها</h3>
+<pre><span class="kw">class</span> <span class="cls">ProductListView</span>(<span class="cls">ListView</span>):
+    model = Product
+    context_object_name = <span class="str">'products'</span>
+    template_name = <span class="str">'shop/products.html'</span>
+
+
+<span class="kw">class</span> <span class="cls">ProductDetailView</span>(<span class="cls">DetailView</span>):
+    model = Product
+    slug_field = <span class="str">'slug'</span>
+    context_object_name = <span class="str">'product'</span>
+    template_name = <span class="str">'shop/product.html'</span>
+
+    <span class="kw">def</span> <span class="fn">get_context_data</span>(self, **kwargs):
+        context = <span class="fn">super</span>().<span class="fn">get_context_data</span>(**kwargs)
+        context[<span class="str">'form'</span>] = <span class="fn">CommentForm</span>()
+        context[<span class="str">'cart_form'</span>] = <span class="fn">AddProductToCartForm</span>()
+        <span class="kw">return</span> context
+
+
+<span class="kw">class</span> <span class="cls">CommentCreateView</span>(<span class="cls">LoginRequiredMixin</span>, <span class="cls">CreateView</span>):
+    model = Comment
+    form_class = <span class="cls">CommentForm</span>
+    template_name = <span class="str">'shop/comment-create.html'</span>
+
+    <span class="kw">def</span> <span class="fn">get_success_url</span>(self):
+        <span class="kw">return</span> <span class="fn">reverse</span>(<span class="str">'product_detail'</span>, kwargs={<span class="str">'slug'</span>: self.kwargs[<span class="str">'slug'</span>]})
+
+    <span class="kw">def</span> <span class="fn">form_valid</span>(self, form):
+        obj = form.<span class="fn">save</span>(commit=<span class="kw">False</span>)
+        product = <span class="fn">get_object_or_404</span>(Product, slug=self.kwargs[<span class="str">'slug'</span>])
+        obj.product = product
+        <span class="kw">return</span> <span class="fn">super</span>().<span class="fn">form_valid</span>(form)
+
+
+<span class="kw">class</span> <span class="cls">CartAddView</span>(<span class="cls">LoginRequiredMixin</span>, <span class="cls">View</span>):
+    <span class="kw">def</span> <span class="fn">post</span>(self, request, product_id):
+        form = <span class="fn">AddProductToCartForm</span>(request.POST)
+        product = <span class="fn">get_object_or_404</span>(Product, pk=product_id)
+
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            cart, _ = Cart.objects.<span class="fn">get_or_create</span>(user=request.user)  <span class="com"># ← فیلتر!</span>
+            CartItem.objects.<span class="fn">create</span>(
+                cart=cart,
+                product=product,
+                quantity=form.cleaned_data[<span class="str">'quantity'</span>]
+            )
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'product_list'</span>)
+
+
+<span class="kw">class</span> <span class="cls">CreateOrderView</span>(<span class="cls">LoginRequiredMixin</span>, <span class="cls">View</span>):
+    <span class="kw">def</span> <span class="fn">post</span>(self, request, pk):
+        cart = <span class="fn">get_object_or_404</span>(Cart, pk=pk, user=request.user)
+        order = Order.objects.<span class="fn">create</span>(user=request.user)
+        <span class="fn">create_order_from_cart</span>(cart=cart, order=order)
+        cart.items.<span class="fn">all</span>().<span class="fn">delete</span>()  <span class="com"># سبد رو خالی کن</span>
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'order_detail'</span>, pk=order.pk)</pre>
+
+    <h3>۱۲.۳ URL ها</h3>
+<pre>urlpatterns = [
+    <span class="com"># Products</span>
+    <span class="fn">path</span>(<span class="str">'products/'</span>, ProductListView.<span class="fn">as_view</span>(), name=<span class="str">'product_list'</span>),
+    <span class="fn">path</span>(<span class="str">'products/&lt;slug:slug&gt;/'</span>, ProductDetailView.<span class="fn">as_view</span>(), name=<span class="str">'product_detail'</span>),
+    <span class="fn">path</span>(<span class="str">'products/create/'</span>, ProductCreateView.<span class="fn">as_view</span>(), name=<span class="str">'product_create'</span>),
+    <span class="fn">path</span>(<span class="str">'products/&lt;slug:slug&gt;/update/'</span>, ProductUpdateView.<span class="fn">as_view</span>(), name=<span class="str">'product_update'</span>),
+    <span class="fn">path</span>(<span class="str">'products/&lt;slug:slug&gt;/delete/'</span>, ProductDeleteView.<span class="fn">as_view</span>(), name=<span class="str">'product_delete'</span>),
+    <span class="fn">path</span>(<span class="str">'products/&lt;slug:slug&gt;/comment/'</span>, CommentCreateView.<span class="fn">as_view</span>(), name=<span class="str">'create_comment'</span>),
+
+    <span class="com"># Cart</span>
+    <span class="fn">path</span>(<span class="str">'cart/'</span>, CartListView.<span class="fn">as_view</span>(), name=<span class="str">'cart_list'</span>),
+    <span class="fn">path</span>(<span class="str">'cart/&lt;int:pk&gt;/'</span>, CartDetailView.<span class="fn">as_view</span>(), name=<span class="str">'cart_detail'</span>),
+    <span class="fn">path</span>(<span class="str">'cart/&lt;int:pk&gt;/create/order/'</span>, CreateOrderView.<span class="fn">as_view</span>(), name=<span class="str">'order_create'</span>),
+    <span class="fn">path</span>(<span class="str">'add-to-cart/&lt;int:product_id&gt;/'</span>, CartAddView.<span class="fn">as_view</span>(), name=<span class="str">'add_to_cart'</span>),
+
+    <span class="com"># Order</span>
+    <span class="fn">path</span>(<span class="str">'order/&lt;int:pk&gt;/'</span>, OrderDetailView.<span class="fn">as_view</span>(), name=<span class="str">'order_detail'</span>),
+]</pre>
+
+    <h3>۱۲.۴ سرویس</h3>
+<pre><span class="op">@</span><span class="fn">transaction.atomic</span>
+<span class="kw">def</span> <span class="fn">create_order_from_cart</span>(cart, order):
+    <span class="kw">for</span> item <span class="kw">in</span> cart.items.<span class="fn">all</span>():
+        OrderItem.objects.<span class="fn">create</span>(
+            order=order,
+            product=item.product,
+            quantity=item.quantity
+        )
+    order.final_price = <span class="fn">sum</span>(
+        item.product.price * item.quantity
+        <span class="kw">for</span> item <span class="kw">in</span> order.items.<span class="fn">all</span>()
+    )
+    order.<span class="fn">save</span>()</pre>
+
+    <h3>۱۲.۵ تمپلیت‌ها</h3>
+
+    <h4>products.html</h4>
+<pre>{% extends <span class="str">"_base.html"</span> %}
+{% block content %}
+
+{% if request.user.is_authenticated %}
+    &lt;a href=<span class="str">"{% url 'cart_detail' request.user.cart.id %}"</span>&gt;سبد من&lt;/a&gt;
+{% else %}
+    &lt;a href=<span class="str">"{% url 'account_signup' %}"</span>&gt;ثبت‌نام&lt;/a&gt;
+    &lt;a href=<span class="str">"{% url 'account_login' %}"</span>&gt;ورود&lt;/a&gt;
+{% endif %}
+
+{% for product in products %}
+    &lt;div&gt;
+        &lt;h3&gt;{{ product.title }}&lt;/h3&gt;
+        &lt;a href=<span class="str">"{{ product.get_absolute_url }}"</span>&gt;مشاهده&lt;/a&gt;
+        &lt;p&gt;قیمت: {{ product.price }}&lt;/p&gt;
+        &lt;p&gt;موجودی: {{ product.stash }}&lt;/p&gt;
+    &lt;/div&gt;
+{% empty %}
+    &lt;p&gt;محصولی وجود ندارد&lt;/p&gt;
+{% endfor %}
+
+{% endblock %}</pre>
+
+    <h4>product.html</h4>
+<pre>{% extends <span class="str">"_base.html"</span> %}
+{% block content %}
+
+&lt;h3&gt;{{ product.title }}&lt;/h3&gt;
+&lt;p&gt;قیمت: {{ product.price }}&lt;/p&gt;
+
+{% if user.is_staff %}
+    &lt;a href=<span class="str">"{% url 'product_update' product.slug %}"</span>&gt;ویرایش&lt;/a&gt;
+    &lt;a href=<span class="str">"{% url 'product_delete' product.slug %}"</span>&gt;حذف&lt;/a&gt;
+{% endif %}
+
+<span class="com">&lt;!-- افزودن به سبد --&gt;</span>
+&lt;form action=<span class="str">"{% url 'add_to_cart' product.id %}"</span> method=<span class="str">"POST"</span>&gt;
+    {% csrf_token %}
+    {{ cart_form.as_p }}
+    &lt;input type=<span class="str">"submit"</span> value=<span class="str">"افزودن به سبد"</span>&gt;
+&lt;/form&gt;
+
+<span class="com">&lt;!-- نظرات --&gt;</span>
+{% for comment in product.comments.all %}
+    &lt;div&gt;
+        &lt;strong&gt;{{ comment.author }}&lt;/strong&gt;
+        &lt;p&gt;{{ comment.description }}&lt;/p&gt;
+    &lt;/div&gt;
+{% empty %}
+    &lt;p&gt;نظری ثبت نشده&lt;/p&gt;
+{% endfor %}
+
+<span class="com">&lt;!-- ثبت نظر --&gt;</span>
+{% if user.is_authenticated %}
+    &lt;form action=<span class="str">"{% url 'create_comment' product.slug %}"</span> method=<span class="str">"POST"</span>&gt;
+        {% csrf_token %}
+        {{ form.as_p }}
+        &lt;input type=<span class="str">"submit"</span> value=<span class="str">"ثبت نظر"</span>&gt;
+    &lt;/form&gt;
+{% endif %}
+
+{% endblock %}</pre>
+</section>
+
+<!-- ==================== CH 13 ==================== -->
+<section class="section" id="ch13">
+    <h2><span class="num">۱۳</span> اشتباهات رایج</h2>
+
+    <h3>۱۳.۱ امنیت - LoginRequired</h3>
+    <div class="callout danger">
+        <div class="callout-title">❌ مشکل</div>
+        <code>class ProductCreateView(CreateView)</code> → هرکسی می‌تونه محصول بسازه!
+    </div>
+<pre><span class="com"># ✅ اصلاح</span>
+<span class="kw">class</span> <span class="cls">ProductCreateView</span>(<span class="cls">LoginRequiredMixin</span>, <span class="cls">UserPassesTestMixin</span>, <span class="cls">CreateView</span>):
+    <span class="kw">def</span> <span class="fn">test_func</span>(self):
+        <span class="kw">return</span> self.request.user.is_staff</pre>
+
+    <h3>۱۳.۲ get_or_create بدون فیلتر</h3>
+    <div class="callout danger">
+        <div class="callout-title">❌ مشکل</div>
+        <code>cart, _ = Cart.objects.get_or_create()</code> → هر بار سبد جدید!
+        چون Django دنبال «همه» Cart ها می‌گرده و چیزی پیدا نمی‌کنه، پس می‌سازه.
+    </div>
+<pre><span class="com"># ✅ اصلاح</span>
+cart, _ = Cart.objects.<span class="fn">get_or_create</span>(user=request.user)</pre>
+
+    <h3>۱۳.۳ success_url اشتباه</h3>
+<pre><span class="com"># ❌ مشکل</span>
+success_url = <span class="str">'products/'</span>  <span class="com"># نسبی</span>
+
+<span class="com"># ✅ اصلاح</span>
+<span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy
+success_url = <span class="fn">reverse_lazy</span>(<span class="str">'product_list'</span>)</pre>
+
+    <h3>۱۳.۴ منطق مالیات</h3>
+<pre><span class="com"># ❌ مشکل</span>
+result = result / <span class="num">10</span> + result  <span class="com"># 110% !</span>
+
+<span class="com"># ✅ اصلاح</span>
+<span class="kw">return</span> result * <span class="cls">Decimal</span>(<span class="str">'1.1'</span>)  <span class="com"># ۱۰٪ مالیات</span></pre>
+
+    <h3>۱۳.۵ request.user.cart بدون چک</h3>
+<pre><span class="com">{# ❌ مشکل: اگه کاربر سبد نداشته باشه → خطا #}</span>
+{% if request.user.is_authenticated %}
+    &lt;a href=<span class="str">"{% url 'cart_detail' request.user.cart.id %}"</span>&gt;سبد من&lt;/a&gt;
+{% endif %}
+
+<span class="com">{# ✅ اصلاح #}</span>
+{% if request.user.is_authenticated %}
+    {% if request.user.cart %}
+        &lt;a href=<span class="str">"{% url 'cart_detail' request.user.cart.id %}"</span>&gt;سبد من&lt;/a&gt;
+    {% else %}
+        &lt;a href=<span class="str">"{% url 'product_list' %}"</span>&gt;شروع خرید&lt;/a&gt;
+    {% endif %}
+{% endif %}</pre>
+
+    <h3>۱۳.۶ تگ &lt;a&gt; اشتباه</h3>
+<pre><span class="com">&lt;!-- ❌ --&gt;</span>
+&lt;a href=<span class="str">"..."</span>&gt;Update&lt;a&gt;
+
+<span class="com">&lt;!-- ✅ --&gt;</span>
+&lt;a href=<span class="str">"..."</span>&gt;Update&lt;/a&gt;</pre>
+
+    <h3>۱۳.۷ enctype اشتباه</h3>
+<pre><span class="com">&lt;!-- برای فرم با فایل: --&gt;</span>
+&lt;form method=<span class="str">"POST"</span> enctype=<span class="str">"multipart/form-data"</span>&gt;
+
+<span class="com">&lt;!-- برای فرم بدون فایل: --&gt;</span>
+&lt;form method=<span class="str">"POST"</span>&gt;</pre>
+
+    <h3>۱۳.۸ تمپلیت‌های قاطی</h3>
+    <p>هر ویو باید تمپلیت خودش رو داشته باشه:</p>
+    <ul>
+        <li><code>ProductDetailView</code> → <code>shop/product.html</code></li>
+        <li><code>CommentCreateView</code> → <code>shop/comment-create.html</code> (نه <code>product-create.html</code>)</li>
+    </ul>
+</section>
+
+<!-- ==================== CH 14 ==================== -->
+<section class="section" id="ch14">
+    <h2><span class="num">۱۴</span> جریان کامل پروژه</h2>
+
+    <h3>۱۴.۱ سناریو: مشاهده محصولات</h3>
+    <div class="diagram">
+<pre>۱. کاربر می‌ره /products/
+   ↓
+۲. urls.py: path('products/', ProductListView.as_view())
+   ↓
+۳. ProductListView اجرا می‌شه:
+   - model = Product
+   - Django می‌ره: SELECT * FROM shop_product
+   - context = {'products': &lt;QuerySet [...]&gt;}
+   ↓
+۴. Django می‌ره template: shop/products.html
+   ↓
+۵. تمپلیت رندر می‌شه:
+   - {% for product in products %} → حلقه
+   - {{ product.title }} → مقدار
+   ↓
+۶. HTML نهایی برمی‌گرده به کاربر</pre>
+    </div>
+
+    <h3>۱۴.۲ سناریو: افزودن به سبد</h3>
+    <div class="diagram">
+<pre>۱. کاربر روی محصول کلیک → /products/iphone/
+   ↓
+۲. ProductDetailView:
+   - SELECT * FROM shop_product WHERE slug = 'iphone'
+   - context = {'product': &lt;Product&gt;, 'form': ..., 'cart_form': ...}
+   ↓
+۳. تمپلیت product.html رندر با فرم افزودن به سبد
+   ↓
+۴. کاربر quantity=2 پر می‌کنه، Submit
+   ↓
+۵. POST به /add-to-cart/5/ (۵ = product_id)
+   ↓
+۶. CartAddView.post():
+   - form = AddProductToCartForm(request.POST)
+   - if form.is_valid(): quantity = 2
+   - cart, _ = Cart.objects.get_or_create(user=request.user)
+   - CartItem.objects.create(cart=cart, product=product, quantity=2)
+   ↓
+۷. redirect به /products/</pre>
+    </div>
+
+    <h3>۱۴.۳ سناریو: ثبت سفارش</h3>
+    <div class="diagram">
+<pre>۱. کاربر می‌ره /cart/3/
+   ↓
+۲. CartDetailView:
+   - SELECT * FROM shop_cart WHERE id = 3
+   - context = {'cart': &lt;Cart&gt;}
+   ↓
+۳. تمپلیت cart.html رندر
+   ↓
+۴. کاربر روی "ثبت سفارش" کلیک → POST /cart/3/create/order/
+   ↓
+۵. CreateOrderView.post():
+   - cart = get_object_or_404(Cart, pk=3, user=request.user)
+   - order = Order.objects.create(user=request.user)
+   - create_order_from_cart(cart, order):
+     * for item in cart.items.all():
+       - OrderItem.objects.create(order=order, ...)
+     * order.final_price = sum(...)
+     * order.save()
+   - cart.items.all().delete()  # خالی کردن سبد
+   ↓
+۶. redirect به /order/7/
+   ↓
+۷. OrderDetailView:
+   - SELECT * FROM shop_order WHERE id = 7
+   - context = {'order': &lt;Order&gt;}
+   ↓
+۸. تمپلیت order.html رندر</pre>
+    </div>
+</section>
+
+<!-- ==================== CH 15 ==================== -->
+<section class="section" id="ch15">
+    <h2><span class="num">۱۵</span> نکات حرفه‌ای</h2>
+
+    <h3>۱۵.۱ N+1 Problem</h3>
+    <p>وقتی توی حلقه به یه relationship دسترسی داری، Django برای هر آیتم یه query جداگانه می‌زنه.</p>
+<pre><span class="com"># ❌ بد: ۱۰۱ تا query</span>
+products = Product.objects.<span class="fn">all</span>()          <span class="com"># ۱ query</span>
+<span class="kw">for</span> p <span class="kw">in</span> products:
+    <span class="fn">print</span>(p.comments.<span class="fn">count</span>())              <span class="com"># ۱۰۰ query اضافی</span>
+
+<span class="com"># ✅ خوب: ۲ query</span>
+products = Product.objects.<span class="fn">prefetch_related</span>(<span class="str">'comments'</span>)
+<span class="kw">for</span> p <span class="kw">in</span> products:
+    <span class="fn">print</span>(p.comments.<span class="fn">count</span>())              <span class="com"># از حافظه</span></pre>
+
+    <h3>۱۵.۲ only() و defer()</h3>
+<pre><span class="com"># فقط این فیلدها رو بگیر (سریع‌تر)</span>
+Product.objects.<span class="fn">only</span>(<span class="str">'title'</span>, <span class="str">'price'</span>)
+
+<span class="com"># این فیلدها رو نگیر</span>
+Product.objects.<span class="fn">defer</span>(<span class="str">'description'</span>)</pre>
+
+    <h3>۱۵.۳ exists() به جای count()</h3>
+<pre><span class="com"># ❌ کند</span>
+<span class="kw">if</span> product.comments.<span class="fn">count</span>() &gt; <span class="num">0</span>:
+
+<span class="com"># ✅ سریع</span>
+<span class="kw">if</span> product.comments.<span class="fn">exists</span>():</pre>
+
+    <h3>۱۵.۴ Context Processor</h3>
+<pre><span class="com"># shop/context_processors.py</span>
+<span class="kw">def</span> <span class="fn">site_settings</span>(request):
+    <span class="kw">return</span> {
+        <span class="str">'site_name'</span>: <span class="str">'فروشگاه من'</span>,
+        <span class="str">'cart_count'</span>: (
+            request.user.cart.items.<span class="fn">count</span>()
+            <span class="kw">if</span> request.user.<span class="fn">is_authenticated</span> <span class="kw">and</span> <span class="fn">hasattr</span>(request.user, <span class="str">'cart'</span>)
+            <span class="kw">else</span> <span class="num">0</span>
+        ),
+    }
+
+<span class="com"># settings.py - به TEMPLATES اضافه کن:</span>
+<span class="str">'shop.context_processors.site_settings'</span>
+
+<span class="com"># الان توی هر تمپلیت:</span>
+{{ site_name }}  {{ cart_count }}</pre>
+
+    <h3>۱۵.۵ Signals</h3>
+<pre><span class="kw">from</span> django.db.models.signals <span class="kw">import</span> post_save
+<span class="kw">from</span> django.dispatch <span class="kw">import</span> receiver
+
+<span class="op">@</span><span class="fn">receiver</span>(post_save, sender=User)
+<span class="kw">def</span> <span class="fn">create_cart</span>(sender, instance, created, **kwargs):
+    <span class="kw">if</span> created:
+        Cart.objects.<span class="fn">create</span>(user=instance)
+<span class="com"># هر کاربر جدید → خودکار سبد ساخته بشه</span></pre>
+
+    <h3>۱۵.۶ Test</h3>
+<pre><span class="kw">from</span> django.test <span class="kw">import</span> TestCase
+<span class="kw">from</span> .models <span class="kw">import</span> Product
+
+<span class="kw">class</span> <span class="cls">ProductModelTest</span>(<span class="cls">TestCase</span>):
+    <span class="kw">def</span> <span class="fn">setUp</span>(self):
+        self.product = Product.objects.<span class="fn">create</span>(
+            title=<span class="str">'Test'</span>,
+            price=<span class="num">100</span>
+        )
+
+    <span class="kw">def</span> <span class="fn">test_str</span>(self):
+        self.<span class="fn">assertEqual</span>(<span class="fn">str</span>(self.product), <span class="str">'Test'</span>)
+
+    <span class="kw">def</span> <span class="fn">test_slug</span>(self):
+        self.<span class="fn">assertEqual</span>(self.product.slug, <span class="str">'test'</span>)</pre>
+</section>
+
+<!-- ==================== CH 16 ==================== -->
+<section class="section" id="ch16">
+    <h2><span class="num">۱۶</span> چیت‌شیت نهایی</h2>
+
+    <h3>دستورات</h3>
+<pre>django-admin startproject config .
+python manage.py startapp shop
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+python manage.py createsuperuser
+python manage.py shell
+python manage.py test</pre>
+
+    <h3>Model</h3>
+<pre><span class="kw">class</span> <span class="cls">Product</span>(models.Model):
+    title = models.<span class="fn">CharField</span>(max_length=<span class="num">255</span>)
+    slug = models.<span class="fn">SlugField</span>(blank=<span class="kw">True</span>, unique=<span class="kw">True</span>)
+    price = models.<span class="fn">DecimalField</span>(max_digits=<span class="num">12</span>, decimal_places=<span class="num">2</span>)
+    created = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> self.title
+
+    <span class="kw">def</span> <span class="fn">get_absolute_url</span>(self):
+        <span class="kw">return</span> <span class="fn">reverse</span>(<span class="str">'product_detail'</span>, kwargs={<span class="str">'slug'</span>: self.slug})</pre>
+
+    <h3>View</h3>
+<pre><span class="kw">class</span> <span class="cls">ProductListView</span>(<span class="cls">ListView</span>):
+    model = Product
+    context_object_name = <span class="str">'products'</span>
+    template_name = <span class="str">'shop/products.html'</span></pre>
+
+    <h3>URL</h3>
+<pre><span class="fn">path</span>(<span class="str">'products/'</span>, ProductListView.<span class="fn">as_view</span>(), name=<span class="str">'product_list'</span>)
+<span class="fn">path</span>(<span class="str">'products/&lt;slug:slug&gt;/'</span>, ProductDetailView.<span class="fn">as_view</span>(), name=<span class="str">'product_detail'</span>)</pre>
+
+    <h3>Template</h3>
+<pre>{% extends <span class="str">"_base.html"</span> %}
+{% block content %}
+    {% for product in products %}
+        &lt;h3&gt;{{ product.title }}&lt;/h3&gt;
+        &lt;a href=<span class="str">"{% url 'product_detail' product.slug %}"</span>&gt;مشاهده&lt;/a&gt;
+    {% empty %}
+        &lt;p&gt;خالی&lt;/p&gt;
+    {% endfor %}
+{% endblock %}</pre>
+
+    <h3>ORM</h3>
+<pre>Product.objects.<span class="fn">create</span>(title=<span class="str">'x'</span>, price=<span class="num">100</span>)
+Product.objects.<span class="fn">get</span>(id=<span class="num">1</span>)
+Product.objects.<span class="fn">filter</span>(price__gt=<span class="num">50</span>).<span class="fn">order_by</span>(<span class="str">'-price'</span>)[:<span class="num">5</span>]
+Product.objects.<span class="fn">prefetch_related</span>(<span class="str">'comments'</span>).<span class="fn">all</span>()</pre>
+
+    <h3>Form</h3>
+<pre><span class="kw">class</span> <span class="cls">ContactForm</span>(forms.Form):
+    name = forms.<span class="fn">CharField</span>(max_length=<span class="num">100</span>)
+    email = forms.<span class="fn">EmailField</span>()
+    message = forms.<span class="fn">CharField</span>(widget=forms.<span class="cls">Textarea</span>)</pre>
+
+    <h3>Services</h3>
+<pre><span class="op">@</span><span class="fn">transaction.atomic</span>
+<span class="kw">def</span> <span class="fn">create_order</span>(cart, user):
+    order = Order.objects.<span class="fn">create</span>(user=user)
+    <span class="kw">for</span> item <span class="kw">in</span> cart.items.<span class="fn">all</span>():
+        OrderItem.objects.<span class="fn">create</span>(
+            order=order,
+            product=item.product,
+            quantity=item.quantity
+        )
+    order.final_price = <span class="fn">sum</span>(...)
+    order.<span class="fn">save</span>()
+    <span class="kw">return</span> order</pre>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+    <p>ساخته شده با <span class="heart">❤</span> برای یادگیری Django</p>
+    <p style="margin-top: 8px; font-size: 0.85rem;">
+        🐍 جزوه جامع Django — از صفر تا پروژه فروشگاهی با توضیح خط به خط
+    </p>
+</footer>
+
+</div>
+
+<!-- ==================== BACK TO TOP ==================== -->
+<a href="#" class="back-to-top" id="backToTop" title="برو بالا">↑</a>
+
+<script>
+// Back to top button
+const backToTop = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+        backToTop.classList.add('show');
+    } else {
+        backToTop.classList.remove('show');
+    }
+});
+
+backToTop.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Auto-close other details when one opens
+document.querySelectorAll('details').forEach((detail) => {
+    detail.addEventListener('toggle', () => {
+        if (detail.open) {
+            document.querySelectorAll('details').forEach((other) => {
+                if (other !== detail && other.open) {
+                    other.open = false;
+                }
+            });
+        }
+    });
+});
+
+// Smooth active state for TOC
+const sections = document.querySelectorAll('section[id]');
+const tocLinks = document.querySelectorAll('.toc a');
+
+const observerOptions = {
+    rootMargin: '-100px 0px -60% 0px',
+    threshold: 0
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            const id = entry.target.id;
+            tocLinks.forEach((link) => {
+                link.style.color = '';
+                link.style.fontWeight = '';
+                if (link.getAttribute('href') === '#' + id) {
+                    link.style.color = '#0C4B33';
+                    link.style.fontWeight = '700';
+                }
+            });
+        }
+    });
+}, observerOptions);
+
+sections.forEach((section) => observer.observe(section));
+</script>
+
+</body>
+</html>
